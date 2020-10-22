@@ -1,0 +1,26 @@
+[
+    {
+        "id":1,
+        "nome":"João",
+        "endereco": "Av.Passarinho nº 10",
+        "focos": 2
+    },
+    {
+        "id":2,
+        "nome":"Luiz",
+        "endereco": "Rua Pedro Ribeiro nº 390",
+        "focos": 5
+    },
+    {
+        "id":3,
+        "nome":"Leandra",
+        "endereco": "Av.São Paulo nº 100",
+        "focos": 0
+    },
+    {
+        "id":4,
+        "nome":"Rute",
+        "endereco": "Rua Castelo Brabco nº 30",
+        "focos": 8
+    }
+]

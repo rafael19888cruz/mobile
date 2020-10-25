@@ -6,15 +6,15 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Button,
-  TouchableOpacity,
+  Alert,
 
 } from 'react-native';
 
 import FormRow from '../components/FormRow';
 import { connect } from 'react-redux';
-import { setField } from '../actions';
+import { setField, salvaCliente } from '../actions';
 
-const Cadastro = ({ clientesForm, setField }) => (
+const Cadastro = ({ clientesForm, setField, salvaCliente, navigation}) => (
   <View style={styles.background}>
     <FormRow>
       <KeyboardAvoidingView>
@@ -24,7 +24,7 @@ const Cadastro = ({ clientesForm, setField }) => (
           style={styles.input}
           placeholder="Nome"
           value={clientesForm.nome}
-          onChangeText={value => setField('nome', value)}
+          onChangeText={value => setField(value)}
         />
         <TextInput
           placeholderTextColor="#3337"
@@ -47,7 +47,11 @@ const Cadastro = ({ clientesForm, setField }) => (
        <Button
           title="Cadastrar"
           onPress={() => {
-            console.log(clientesForm)
+           try{
+               salvaCliente(clientesForm);
+            }catch(error){
+              Alert.alert('Erro: ', error.message);
+            }
           }} />
 
       </View>
@@ -55,7 +59,9 @@ const Cadastro = ({ clientesForm, setField }) => (
         <Button
 
           title="listar"
-          onNavigate={() => props.navigation.navigate('Listagem')}
+          onPress={() => {
+            navigation.navigate('Listagem');
+          }}
         />
       </View>
     </FormRow>
@@ -100,7 +106,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  setField
+  setField,
+  salvaCliente
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cadastro);

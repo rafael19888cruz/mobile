@@ -14,7 +14,7 @@ import {
 
 import FormRow from '../components/FormRow';
 import firebase from 'firebase';
-import {logando} from '../actions'
+import {logando} from '../actions';
 import { connect } from 'react-redux';
 
 ///////////////////////////////////TELA DE LOGIN//////////////////////////////////

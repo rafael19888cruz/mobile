@@ -1,4 +1,6 @@
 import {USER_LOGIN_SUCESS,USER_LOGOUT} from '../actions';
+
+
 export default function userReducer(state = null, action) {
 
     switch(action.type){

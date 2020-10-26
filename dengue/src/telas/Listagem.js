@@ -1,24 +1,33 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
-import clientes from '../../clientes.json';
 import ClienteList from '../components/ClienteList';
+import {connect} from 'react-redux';
+import {watchClientes} from '../actions';
 
-const Listagem = props => (
-    <View style={styles.container_list}>
-        <FlatList
-            data={clientes}
-            renderItem={({ item }) => {
-                return (
-                   <ClienteList 
-                   client={item}
-                   onNavigate={()=>props.navigation.navigate('Detalhes de Usuários', {clientes: item})}
-                   />
-                );
-            }}
-            keyExtractor= {item => item.id.toString()}        />
+class Listagem extends React.Component{
+    componentDidMount(){
+        this.props.watchClientes();
+    }
+    render(){
+        return(
+            <View style={styles.container_list}>
+                <FlatList
+                    data={[...this.props.clientes]}
+                    renderItem={({ item }) => {
+                        return (
+                           <ClienteList 
+                           client={item}
+                           onNavigate={()=> this.props.navigation.navigate('Detalhes de Usuários', {client: item})}
+                           />
+                        );
+                    }}
+                    keyExtractor= {item => item.id.toString()}        />
+        
+            </View>
+        )
+    }
+}
 
-    </View>
-)
 
 const styles = StyleSheet.create({
     container_list: {
@@ -27,4 +36,15 @@ const styles = StyleSheet.create({
       }
 });
 
-export default Listagem;
+const mapStateToProps = state => {
+    const {listaclientes} = state;
+
+    const keys = Object.keys(listaclientes);
+    const listId = keys.map(key => {
+       return {...listaclientes[key], id: key}   
+    })
+    return{clientes: listId};
+
+}
+
+export default connect(mapStateToProps, {watchClientes})(Listagem);

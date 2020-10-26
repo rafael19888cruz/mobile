@@ -5,68 +5,84 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   TextInput,
-  Button,
-  Alert,
+  Button
 
 } from 'react-native';
 
 import FormRow from '../components/FormRow';
 import { connect } from 'react-redux';
-import { setField, salvaCliente } from '../actions';
+import { setField, salvaCliente, setAllFields} from '../actions';
 
-const Cadastro = ({ clientesForm, setField, salvaCliente, navigation}) => (
-  <View style={styles.background}>
-    <FormRow>
-      <KeyboardAvoidingView>
+class Cadastro extends React.Component {
+  constructor(props){
+    super(props);
+  }
 
-        <TextInput
-          placeholderTextColor="#3337"
-          style={styles.input}
-          placeholder="Nome"
-          value={clientesForm.nome}
-          onChangeText={value => setField(value)}
-        />
-        <TextInput
-          placeholderTextColor="#3337"
-          style={styles.input}
-          placeholder="Endereço"
-          value={clientesForm.endereco}
-          onChangeText={value => setField('endereco', value)}
-        />
-        <TextInput
-          placeholderTextColor="#3337"
-          style={styles.input}
-          placeholder="Qntd de focos"
-          value={clientesForm.focos}
-          onChangeText={value => setField('focos', value)}
-        />
-      </KeyboardAvoidingView>
+  componentDidMount(){
+   const {navigation, setAllFields} = this.props;
+   const {params} = navigation.state;
 
-      <View style={styles.submitbutton_cadastro}>
-       
-       <Button
-          title="Cadastrar"
-          onPress={() => {
-           try{
-               salvaCliente(clientesForm);
-            }catch(error){
-              Alert.alert('Erro: ', error.message);
-            }
-          }} />
+   if(params && params.clienteEdit){
+     setAllFields(params.clienteEdit)
+   }
+  }
 
+  render() {
+    const { clientesForm, setField, salvaCliente, navigation } = this.props;
+
+    return (
+      <View style={styles.background}>
+        <FormRow>
+          <KeyboardAvoidingView>
+
+            <TextInput
+              placeholderTextColor="#3337"
+              style={styles.input}
+              placeholder="Nome"
+              value={clientesForm.nome}
+              onChangeText={valu => {
+                setField('nome', valu)
+              }}
+              />
+
+            <TextInput
+              placeholderTextColor="#3337"
+              style={styles.input}
+              placeholder="Endereço"
+              value={clientesForm.endereco}
+              onChangeText={valu => {
+                setField('endereco', valu)
+              }}/>
+
+            <TextInput
+              placeholderTextColor="#3337"
+              style={styles.input}
+              placeholder="Qntd de focos"
+              value={clientesForm.focos}
+              onChangeText={value => setField('focos', value)}
+            />
+          </KeyboardAvoidingView>
+        </FormRow>
+        <View style={styles.submitbutton_cadastro}>
+          <Button
+            title="Cadastrar"
+            onPress={() => {
+              salvaCliente(clientesForm);
+            }} />
+        </View>
+        <View style={styles.submitbutton_cadastro}>
+          <Button
+
+            title="listar"
+            onPress={() => {
+              navigation.navigate('Listagem');
+            }}
+          />
+        </View>
       </View>
-      <View style={styles.submitbutton_cadastro}>
-        <Button
-
-          title="listar"
-          onPress={() => {
-            navigation.navigate('Listagem');
-          }}
-        />
-      </View>
-    </FormRow>
-  </View>
-);
+    );
+  }
+}
 
 
 const styles = StyleSheet.create({
@@ -107,7 +123,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setField,
-  salvaCliente
+  salvaCliente,
+  setAllFields
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cadastro);

@@ -64,9 +64,9 @@ class Login extends React.Component {
            this.props.navigation.navigate('cadastro');
        })
 
-       .catch( user => {
-           this.setState({message: error.code});
-       })
+      // .catch( user => {
+        //   this.setState({message: error.code});
+       //})
     }
 
     //======================================FUNÇÃO DE TRADUÇÃO DE ERROS

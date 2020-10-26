@@ -1,24 +1,53 @@
-import React from 'react';
-import { View, Button} from 'react-native';
+import React, { Component } from 'react';
+import { View, Button, StyleSheet } from 'react-native';
 import Line from '../components/Line';
-import client from '../telas/Listagem';
+import clientes from '../telas/Listagem';
+import {connect} from 'react-redux';
+import {deletCliente} from '../actions';
 
-export default  class ClientesDetails extends React.Component{
-    render(){
-        return(
+class ClientesDetails extends React.Component {
+    render() {
+        return (
             <View>
-                <Line label="Nome :"                content={client.nome}/>
-                <Line label="Endereço :"            content={client.endereco}/>
-                <Line label="Quantidade de focos :" content={client.focos}/>
-                <Button
-                title="Editar"
-                onPress={() => {
-                    this.props.navigation.replace('cadastro',{clienteEdit: client});
-                }}
-                />
+                <Line label="Nome :" content={clientes.nome} />
+                <Line label="Endereço :" content={clientes.endereco} />
+                <Line label="Quantidade de focos :" content={clientes.focos} />
+
+
+                <View style={styles.button}>
+                    <Button
+                        title="Editar"
+                        color='green'
+                        onPress={() => {
+                            this.props.navigation.replace('cadastro', { clienteEdit: clientes });
+                        }}
+                    />
+                </View>
+                <View style={styles.button}>
+                    <Button
+                        title="Excluir"
+                        color="#FF0004"
+                        onPress={ async () => {
+                            const deletado = await this.props.deletCliente(clientes)
+
+                            if(deletado) {
+                                this.props.navigation.goBack();
+                            }
+                        }}
+                    />
+                </View>
+
 
             </View>
         );
     }
 
 }
+
+const styles = StyleSheet.create({
+    button: {
+        margin: 10
+    }
+});
+
+export default connect(null,{deletCliente: deletCliente})(ClientesDetails);

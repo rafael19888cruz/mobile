@@ -1,33 +1,141 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   KeyboardAvoidingView,
   TextInput,
-  Button
+  Button,
+  Alert,
+  Image,
+  TouchableOpacity,
+  PermissionsAndroid
 
 } from 'react-native';
 
+//import CameraRollPicker from 'react-native-camera-roll-picker';
+import ImgToBase64 from 'react-native-image-base64';
 import FormRow from '../components/FormRow';
 import { connect } from 'react-redux';
-import { setField, salvaCliente, setAllFields} from '../actions';
+import { setField, salvaCliente, setAllFields, resetForm } from '../actions';
+import { RNCamera } from 'react-native-camera';
 
-class Cadastro extends React.Component {
-  constructor(props){
+class Cadastro extends Component {
+  constructor(props) {
     super(props);
+
+    this.state = {
+      isCamera: false,
+      isCameraRoll: false
+    }
   }
 
-  componentDidMount(){
-   const {navigation, setAllFields} = this.props;
+  viewGaleria(){
+    this.requestExternalStoregeAcess();
+
+    return(
+      <CameraRollPicker
+      maximun={1}
+      selectSingleItem={true} 
+      callback={(volta) =>{
+        if(volta.length > 0){
+          console.log(volta);
+          ImgToBase64.getBase64String(volta[0].uri)
+          .then(stringConvertida => {
+            this.props.setField('',stringConvertida)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        }
+        this.setState({
+          isCameraRoll: false,
+        })
+      }}
+      />
+    );
+  }
+
+
+  async requestExternalStoregeAcess(){
+    try{
+      const permission = await PermissionsAndroid
+      .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+
+      if(permission !== PermissionsAndroid.RESULTS.GRANTED){
+        Alert.alert('Negado');
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  /*componentDidMount(){
+  
+    
+  const {navigation, setAllFields, resetForm} = this.props;
    const {params} = navigation.state;
 
    if(params && params.clienteEdit){
      setAllFields(params.clienteEdit)
+   }else{
+     resetForm();
    }
+  }*/
+
+  viewCamera() {
+    return (
+      <View style={styles.container}>
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
+
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.on}
+          androidCameraPermissionOptions={{
+            title: 'Conceder permissão',
+            message: 'Permitir o uso da camera',
+            buttonPositive: 'Aceitar',
+            buttonnegativo: 'Cancelar'
+          }}
+          androidRecordAudioPermissionOptions={{
+            title: 'Permitir audio',
+            message: 'Permitir audio para video',
+            buttonPositive: 'Aceitar',
+            buttonnegativo: 'Cancelar'
+          }}
+        />
+
+        <View>
+          <TouchableOpacity
+            style={styles.capture}
+            onPress={this.takePicture.bind(this)}>
+            <Text>Capturar</Text>
+
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
   }
 
-  render() {
+  takePicture = async () => {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true, forceUpOrientation: true, fixOrientation: true };
+      const data = await this.camera.takePictureAsync(options);
+
+      if (data) {
+        this.props.setField('img', data.base64);
+
+        this.setState({
+          isCamera: false
+        })
+      }
+    }
+  }
+
+  viewForm() {
     const { clientesForm, setField, salvaCliente, navigation } = this.props;
 
     return (
@@ -43,7 +151,7 @@ class Cadastro extends React.Component {
               onChangeText={valu => {
                 setField('nome', valu)
               }}
-              />
+            />
 
             <TextInput
               placeholderTextColor="#3337"
@@ -52,8 +160,7 @@ class Cadastro extends React.Component {
               value={clientesForm.endereco}
               onChangeText={valu => {
                 setField('endereco', valu)
-              }}/>
-
+              }} />
             <TextInput
               placeholderTextColor="#3337"
               style={styles.input}
@@ -61,11 +168,51 @@ class Cadastro extends React.Component {
               value={clientesForm.focos}
               onChangeText={value => setField('focos', value)}
             />
+            <View>
+              {
+                clientesForm.img ?
+                  <Image
+                    source={{ uri: `data:image/jpeg;base64,${clientesForm.img}` }}
+                    style={styles.img}
+                  />
+                  : null
+              }
+              <Button
+                title='captutar focos'
+                onPress={() => {
+                  Alert.alert(
+                    'Capturar focos',
+                    'Como deseja caopturar os focos ?',
+                    [
+                      {
+                        text: 'Camera',
+                        onPress: () => {
+                          this.setState({
+                            isCamera: true,
+                          })
+                        }
+                      },
+                      {
+                        text: 'galeria',
+                        onPress: () => {
+                          this.setState({
+                            isCameraRoll: true,
+                          })
+                        }
+
+                      }
+                    ]
+                  )
+                }}
+              />
+
+            </View>
           </KeyboardAvoidingView>
         </FormRow>
         <View style={styles.submitbutton_cadastro}>
           <Button
             title="Cadastrar"
+            color='green'
             onPress={() => {
               salvaCliente(clientesForm);
             }} />
@@ -74,6 +221,7 @@ class Cadastro extends React.Component {
           <Button
 
             title="listar"
+            color='green'
             onPress={() => {
               navigation.navigate('Listagem');
             }}
@@ -82,8 +230,19 @@ class Cadastro extends React.Component {
       </View>
     );
   }
-}
+  render() {
+    if(this.state.isCameraRoll){
+      return(this.viewCamera())
+    }
 
+    if (this.state.isCamera) {
+      return (this.viewCamera())
+    }
+
+
+    return (this.viewForm())
+  }
+}
 
 const styles = StyleSheet.create({
   background: {
@@ -91,6 +250,20 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor: '#D2FFFF',
+  },
+  img: {
+    aspectRatio: 1,
+    width: '100%',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'black'
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   input: {
     backgroundColor: '#FFF',
@@ -112,6 +285,16 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
   },
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20
+
+  }
 
 });
 
@@ -124,7 +307,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setField,
   salvaCliente,
-  setAllFields
+  setAllFields,
+  resetForm
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cadastro);

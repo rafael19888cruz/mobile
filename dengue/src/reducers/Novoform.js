@@ -1,9 +1,10 @@
-import {SET_FIELD, SET_ALL_FIELDS} from '../actions';
+import {SET_FIELD, SET_ALL_FIELDS, RESET_FORM} from '../actions';
 
 const INICIAL_STATE = {
+    id:null,
     nome: '',
     endereco: '',
-    focos: 0
+    focos: ''
 }
 
 export default function(state = INICIAL_STATE, action){
@@ -13,7 +14,9 @@ export default function(state = INICIAL_STATE, action){
             clonedState[action.field] = action.valu;
             return clonedState;
         case SET_ALL_FIELDS:
-        return  action.cliente;
+            return  action.cliente;
+        case RESET_FORM:
+            return INICIAL_STATE;
 
         
         default:

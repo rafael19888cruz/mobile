@@ -2,14 +2,14 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 
-const ClienteList = ({ client, onNavigate}) => (
+const ClienteList = ({ clientes, onNavigate}) => (
     <TouchableOpacity
     onPress={onNavigate}
     
     style={StyleSheet.container}>
         
         <View style = {styles.list}>
-         <Text>{  `${client.id}   -   ${client.nome}` }</Text>
+         <Text>{  `${clientes.id}   -   ${clientes.nome}` }</Text>
          </View>
     </TouchableOpacity>
 );

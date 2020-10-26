@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { Alert } from 'react-native';
 
 export const SET_FIELD = 'SET_FIELD';
 
@@ -16,14 +17,29 @@ export const setAllFields = cliente => ({
         cliente: cliente
     });
 
+export const RESET_FORM = 'RESET_FORM';
+export const resetForm = () => ({
+    type: RESET_FORM
+})
+
+
 export const salvaCliente = clientnovo => {
     const { currentUser } = firebase.auth();
 
-     firebase
-    .database()
-    .ref(`users/${currentUser.uid}/cliente`)
-    .push(clientnovo);
+    return async dispatch => {
+        if(clientnovo.id){
+            firebase
+            .database()
+            .ref(`users/${currentUser.uid}/cliente/${clientnovo.id}`)
+            .set(clientnovo);
 
-    
-   
+
+        }else{
+            await firebase
+            .database()
+            .ref(`users/${currentUser.uid}/cliente`)
+            .push(clientnovo);
+
+        }
+    }  
 }

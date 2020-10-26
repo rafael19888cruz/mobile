@@ -16,8 +16,8 @@ class Listagem extends React.Component{
                     renderItem={({ item }) => {
                         return (
                            <ClienteList 
-                           client={item}
-                           onNavigate={()=> this.props.navigation.navigate('Detalhes de Usuários', {client: item})}
+                           clientes={item}
+                           onNavigate={()=> this.props.navigation.navigate('Detalhes de Usuários', {clientes: item})}
                            />
                         );
                     }}

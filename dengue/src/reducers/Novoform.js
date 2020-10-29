@@ -4,7 +4,8 @@ const INICIAL_STATE = {
     id:null,
     nome: '',
     endereco: '',
-    focos: ''
+    focos: '',
+    descriao: ''
 }
 
 export default function(state = INICIAL_STATE, action){

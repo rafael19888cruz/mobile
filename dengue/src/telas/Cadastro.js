@@ -30,42 +30,42 @@ class Cadastro extends Component {
     }
   }
 
-  viewGaleria(){
+  viewGaleria() {
     this.requestExternalStoregeAcess();
 
-    return(
+    return (
       <CameraRollPicker
-      maximun={1}
-      selectSingleItem={true} 
-      callback={(volta) =>{
-        if(volta.length > 0){
-          console.log(volta);
-          ImgToBase64.getBase64String(volta[0].uri)
-          .then(stringConvertida => {
-            this.props.setField('',stringConvertida)
+        maximun={1}
+        selectSingleItem={true}
+        callback={(volta) => {
+          if (volta.length > 0) {
+            console.log(volta);
+            ImgToBase64.getBase64String(volta[0].uri)
+              .then(stringConvertida => {
+                this.props.setField('', stringConvertida)
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          }
+          this.setState({
+            isCameraRoll: false,
           })
-          .catch(err => {
-            console.log(err)
-          })
-        }
-        this.setState({
-          isCameraRoll: false,
-        })
-      }}
+        }}
       />
     );
   }
 
 
-  async requestExternalStoregeAcess(){
-    try{
+  async requestExternalStoregeAcess() {
+    try {
       const permission = await PermissionsAndroid
-      .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
-      if(permission !== PermissionsAndroid.RESULTS.GRANTED){
+      if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
         Alert.alert('Negado');
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -168,6 +168,13 @@ class Cadastro extends Component {
               value={clientesForm.focos}
               onChangeText={value => setField('focos', value)}
             />
+             <TextInput
+              placeholderTextColor="#3337"
+              style={styles.input}
+              placeholder="Descrição"
+              value={clientesForm.descricao}
+              onChangeText={value => setField('descricao', value)}
+            />
             <View>
               {
                 clientesForm.img ?
@@ -215,6 +222,7 @@ class Cadastro extends Component {
             color='green'
             onPress={() => {
               salvaCliente(clientesForm);
+              navigation.navigate('Listagem');
             }} />
         </View>
         <View style={styles.submitbutton_cadastro}>
@@ -231,8 +239,8 @@ class Cadastro extends Component {
     );
   }
   render() {
-    if(this.state.isCameraRoll){
-      return(this.viewCamera())
+    if (this.state.isCameraRoll) {
+      return (this.viewCamera())
     }
 
     if (this.state.isCamera) {

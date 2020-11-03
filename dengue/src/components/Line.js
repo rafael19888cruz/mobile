@@ -6,7 +6,7 @@ const Line = ({label, content="-"}) => {
         <View style={styles.line}>
             <Text style={[styles.cell,
                         styles.label,
-                        label.length > 10 ? styles.longLabel: null 
+                        label.length > 15 ? styles.longLabel: null 
                     ]}>{label}</Text>
            
             <Text style={[styles.cell, styles.content]}>{content}</Text>

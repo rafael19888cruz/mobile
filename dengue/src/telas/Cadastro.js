@@ -9,7 +9,8 @@ import {
   Alert,
   Image,
   TouchableOpacity,
-  PermissionsAndroid
+  PermissionsAndroid,
+  ScrollView
 
 } from 'react-native';
 
@@ -70,18 +71,18 @@ class Cadastro extends Component {
     }
   }
 
-  /*componentDidMount(){
-  
-    
-  const {navigation, setAllFields, resetForm} = this.props;
-   const {params} = navigation.state;
+  componentDidMount() {
 
-   if(params && params.clienteEdit){
-     setAllFields(params.clienteEdit)
-   }else{
-     resetForm();
-   }
-  }*/
+
+    const { navigation, setAllFields, resetForm, clienteEdit, pessoas } = this.props;
+    //const {pessoas} = navigation.state;
+
+    if (pessoas && pessoas.clienteEdit) {
+      setAllFields(pessoas.clienteEdit)
+    } else {
+      resetForm();
+    }
+  }
 
   viewCamera() {
     return (
@@ -139,103 +140,107 @@ class Cadastro extends Component {
     const { clientesForm, setField, salvaCliente, navigation } = this.props;
 
     return (
+
       <View style={styles.background}>
-        <FormRow>
-          <KeyboardAvoidingView>
+        <ScrollView>
+          <FormRow>
+            <KeyboardAvoidingView>
 
-            <TextInput
-              placeholderTextColor="#3337"
-              style={styles.input}
-              placeholder="Nome"
-              value={clientesForm.nome}
-              onChangeText={valu => {
-                setField('nome', valu)
-              }}
-            />
-
-            <TextInput
-              placeholderTextColor="#3337"
-              style={styles.input}
-              placeholder="Endereço"
-              value={clientesForm.endereco}
-              onChangeText={valu => {
-                setField('endereco', valu)
-              }} />
-            <TextInput
-              placeholderTextColor="#3337"
-              style={styles.input}
-              placeholder="Qntd de focos"
-              value={clientesForm.focos}
-              onChangeText={value => setField('focos', value)}
-            />
-             <TextInput
-              placeholderTextColor="#3337"
-              style={styles.input}
-              placeholder="Descrição"
-              value={clientesForm.descricao}
-              onChangeText={value => setField('descricao', value)}
-            />
-            <View>
-              {
-                clientesForm.img ?
-                  <Image
-                    source={{ uri: `data:image/jpeg;base64,${clientesForm.img}` }}
-                    style={styles.img}
-                  />
-                  : null
-              }
-              <Button
-                title='captutar focos'
-                onPress={() => {
-                  Alert.alert(
-                    'Capturar focos',
-                    'Como deseja caopturar os focos ?',
-                    [
-                      {
-                        text: 'Camera',
-                        onPress: () => {
-                          this.setState({
-                            isCamera: true,
-                          })
-                        }
-                      },
-                      {
-                        text: 'galeria',
-                        onPress: () => {
-                          this.setState({
-                            isCameraRoll: true,
-                          })
-                        }
-
-                      }
-                    ]
-                  )
+              <TextInput
+                placeholderTextColor="#3337"
+                style={styles.input}
+                placeholder="Nome"
+                value={clientesForm.nome}
+                onChangeText={valu => {
+                  setField('nome', valu)
                 }}
               />
 
-            </View>
-          </KeyboardAvoidingView>
-        </FormRow>
-        <View style={styles.submitbutton_cadastro}>
-          <Button
-            title="Cadastrar"
-            color='green'
-            onPress={() => {
-              salvaCliente(clientesForm);
-              navigation.navigate('Listagem');
-            }} />
-        </View>
-        <View style={styles.submitbutton_cadastro}>
-          <Button
+              <TextInput
+                placeholderTextColor="#3337"
+                style={styles.input}
+                placeholder="Endereço"
+                value={clientesForm.endereco}
+                onChangeText={valu => {
+                  setField('endereco', valu)
+                }} />
+              <TextInput
+                placeholderTextColor="#3337"
+                style={styles.input}
+                placeholder="Qntd de focos"
+                value={clientesForm.focos}
+                onChangeText={value => setField('focos', value)}
+              />
+              <TextInput
+                placeholderTextColor="#3337"
+                style={styles.input}
+                placeholder="Descrição"
+                value={clientesForm.descricao}
+                onChangeText={value => setField('descricao', value)}
+              />
+              <View style={styles.submitbutton_cadastro}>
+                {
+                  clientesForm.img ?
+                    <Image
+                      source={{ uri: `data:image/jpeg;base64,${clientesForm.img}` }}
+                      style={styles.img}
+                    />
+                    : null
+                }
+                <Button
+                  title='captutar focos'
+                  onPress={() => {
+                    Alert.alert(
+                      'Capturar focos',
+                      'Como deseja caopturar os focos ?',
+                      [
+                        {
+                          text: 'Camera',
+                          onPress: () => {
+                            this.setState({
+                              isCamera: true,
+                            })
+                          }
+                        },
+                        {
+                          text: 'galeria',
+                          onPress: () => {
+                            this.setState({
+                              isCameraRoll: true,
+                            })
+                          }
 
-            title="listar"
-            color='green'
-            onPress={() => {
-              navigation.navigate('Listagem');
-            }}
-          />
-        </View>
+                        }
+                      ]
+                    )
+                  }}
+                />
+
+              </View>
+            </KeyboardAvoidingView>
+          </FormRow>
+          <View style={styles.submitbutton_cadastro}>
+            <Button
+              title="Cadastrar"
+              color='green'
+              onPress={() => {
+                salvaCliente(clientesForm);
+                navigation.navigate('Listagem');
+              }} />
+          </View>
+          <View style={styles.submitbutton_cadastro}>
+            <Button
+
+              title="listar"
+              color='green'
+              onPress={() => {
+                navigation.navigate('Listagem');
+              }}
+            />
+          </View>
+        </ScrollView>
       </View>
+
     );
   }
   render() {

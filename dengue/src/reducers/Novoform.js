@@ -5,7 +5,8 @@ const INICIAL_STATE = {
     nome: '',
     endereco: '',
     focos: '',
-    descriao: ''
+    descricao: '',
+    img: ''
 }
 
 export default function(state = INICIAL_STATE, action){
@@ -15,7 +16,7 @@ export default function(state = INICIAL_STATE, action){
             clonedState[action.field] = action.valu;
             return clonedState;
         case SET_ALL_FIELDS:
-            return  action.cliente;
+            return  action.pessoas;
         case RESET_FORM:
             return INICIAL_STATE;
 

@@ -12,9 +12,9 @@ export const setField = (field, valu) => {
 }
 
 export const SET_ALL_FIELDS = 'SET_ALL_FIELDS';
-export const setAllFields = cliente => ({
+export const setAllFields = pessoas => ({
         type: SET_ALL_FIELDS,
-        cliente: cliente
+        pessoas: pessoas
     });
 
 export const RESET_FORM = 'RESET_FORM';

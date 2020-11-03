@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import Line from '../components/Line';
+
+export default class ClientesDetails extends React.Component {
+    render() {
+        return(
+            <Text> Nova seire</Text>
+        );
+    }
+}
+
+
+/*import Line from '../components/Line';
 import LongText from '../components/LongText';
 import {connect} from 'react-redux';
 import {deletCliente} from '../actions';
 
 
-class ClientesDetails extends React.Component {
+class ClientesDetails extends Component {
+    constructor(props) {
+        super(props);
+   
+    }
   render() {
-      // const { pessoas } = this.props.navigation.state.params;
-       /*const pessoas =  {
-
-            "nome":"Luiz",
-            "endereco": "Rua Pedro Ribeiro nº 390",
-            "focos": '5',
-            "descricao": "jhgfdfxc vbnghfdxc bnmhjgfdxc bnmnygfvbnmjhgfvc nmhjgfcv nm,jhgfvc mnhgvc nmjhgvb nm,kjhygfv nmkiuytresdcvbnmloiuytrdfbnkuytfvbnmkiuytfvbnmkliuytfvbnmkuytfvbnkliuytfvbnmkuytfvbnmkjuhygfvbnmkuygfvbnmkjhgfvbnmkjhgfvbnmkjhgvbnmhgv "
-        };*/
-       // return (
+       const { pessoas } = this.props;
+        return (
             <View>
-            <Line label="Nome :" content={`${pessoas.nome}`} />
+            <Line label="Nome :" content={pessoas.nome} />
                 <Line label="Endereço :" content={pessoas.endereco} />
                 <Line label="Quantidade de focos :" content={pessoas.focos} />
                 <LongText label="Descrição :" content={pessoas.descricao} />
@@ -49,7 +56,7 @@ class ClientesDetails extends React.Component {
 
 
             </View>
-
+        );
                     }
                 }
 const styles = StyleSheet.create({
@@ -58,4 +65,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(null,{deletCliente: deletCliente})(ClientesDetails);
+export default connect(null,{deletCliente: deletCliente})(ClientesDetails);*/
